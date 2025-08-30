@@ -1,0 +1,157 @@
+# requirements.txt
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-CORS==4.0.0
+PyJWT==2.8.0
+Werkzeug==2.3.7
+
+# README.md
+# TaskFlow Backend - API REST con Flask
+
+## Descripción
+Backend para la aplicación TaskFlow, un gestor de tareas personal desarrollado siguiendo la metodología XP.
+
+## Características
+-  Autenticación con JWT
+-  CRUD completo de tareas
+-  Base de datos SQLite
+-  Validaciones de entrada
+-  Manejo de errores
+-  Documentación de API
+
+## Historias de Usuario Implementadas
+1. **Registro y Autenticación**: Como usuario, quiero registrarme y autenticarme para acceder a mis tareas
+2. **Gestión de Tareas**: Como usuario, quiero crear, editar y eliminar tareas para organizar mi trabajo
+3. **Estado de Tareas**: Como usuario, quiero marcar tareas como completadas para hacer seguimiento
+
+## Instalación y Ejecución
+
+### Prerequisitos
+- Python 3.8+
+- pip
+
+### Pasos
+1. Clonar el repositorio:
+```bash
+git clone <url-del-repositorio>
+cd taskflow-backend
+```
+
+2. Crear entorno virtual:
+```bash
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+```
+
+3. Instalar dependencias:
+```bash
+pip install -r requirements.txt
+```
+
+4. Ejecutar la aplicación:
+```bash
+python app.py
+```
+
+La API estará disponible en `http://localhost:5000`
+
+## Endpoints de la API
+
+### Autenticación
+- `POST /api/register` - Registrar nuevo usuario
+- `POST /api/login` - Iniciar sesión
+
+### Tareas (requieren autenticación)
+- `GET /api/tasks` - Obtener todas las tareas del usuario
+- `POST /api/tasks` - Crear nueva tarea
+- `PUT /api/tasks/<id>` - Actualizar tarea
+- `DELETE /api/tasks/<id>` - Eliminar tarea
+
+### Utilidad
+- `GET /api/health` - Verificar estado del servidor
+
+## Estructura de Datos
+
+### Usuario
+```json
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Tarea
+```json
+{
+  "title": "string",
+  "description": "string",
+  "priority": "low|medium|high",
+  "completed": boolean
+}
+```
+
+## Base de Datos
+- SQLite para persistencia
+- Modelos: User y Task
+- Relación: Un usuario puede tener múltiples tareas
+
+## Pruebas
+Ejecutar pruebas unitarias:
+```bash
+python -m pytest tests/
+```
+
+## Metodología XP Aplicada
+-  Iteraciones cortas
+-  Pruebas unitarias
+-  Refactorización continua
+-  Programación en pares (via pull requests)
+-  Integración continua
+
+---
+
+# .gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Database
+*.db
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
