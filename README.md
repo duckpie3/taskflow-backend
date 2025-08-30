@@ -179,7 +179,7 @@ El desarrollo de esta API se adhirió a los principios de la Programación Extre
 
 ## Equipo de Desarrollo
 
-*   José Antonio
-*   David
-*   José Manuel
+*   José Antonio García Hernández
+*   José David Aguilar Uribe
+*   José Manuel Evangelista Tiburcio
 ---
