@@ -232,8 +232,7 @@ def delete_task(current_user, task_id):
 def health_check():
     return jsonify({'status': 'healthy', 'message': 'TaskFlow API is running'}), 200
 
-# Inicialización de la base de datos
-@app.before_first_request
+# Inicialización de la base de datos (evitar decoradores removidos en Flask 3)
 def create_tables():
     db.create_all()
 
