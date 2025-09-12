@@ -7,6 +7,8 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+EXPOSE 5000
+
 # Copy the rest of your project files
 COPY . .
 
