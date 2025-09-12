@@ -4,7 +4,7 @@ Backend en Flask para la gestión de usuarios y tareas con JWT. Incluye CRUD de 
 
 ---
 
-## Pila Tecnológica
+## Tech Stack
 
 - Framework: Flask 2.3.3
 - ORM: Flask-SQLAlchemy 3.0.5
@@ -15,7 +15,7 @@ Backend en Flask para la gestión de usuarios y tareas con JWT. Incluye CRUD de 
 
 ---
 
-## Puesta en Marcha
+## Ejecucion
 
 1) Crear entorno virtual e instalar dependencias
 ```bash
@@ -32,6 +32,41 @@ python app.py
 - La API queda en `http://localhost:5000`.
 - La BD `taskflow.db` se crea automáticamente al iniciar.
 - En producción cambia `app.config['SECRET_KEY']` (ver `flask_backend.py`).
+
+---
+
+## Ejecucion con Docker
+
+Este proyecto incluye un Dockerfile multi-stage y un `.dockerignore` para generar imágenes ligeras.
+
+1) Construir la imagen
+```bash
+docker build -t taskflow-backend .
+```
+
+2) Ejecutar el contenedor
+```bash
+docker run --name taskflow-backend \
+  -p 5000:5000 \
+  --rm \
+  taskflow-backend
+```
+
+- La API queda en `http://localhost:5000`.
+- Variable de puerto (opcional): `-e PORT=5000` (por defecto 5000).
+- Persistencia opcional de la BD SQLite:
+  ```bash
+  docker run --name taskflow-backend \
+    -p 5000:5000 \
+    -v taskflow_db:/app/taskflow.db \
+    --rm \
+    taskflow-backend
+  ```
+
+Para detener si no usas `--rm`:
+```bash
+docker stop taskflow-backend && docker rm taskflow-backend
+```
 
 ---
 
