@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+.venv/
+venv/
+ENV/
+
+# Pip / build caches
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Editors / IDE
+.vscode/
+.idea/
+
+# Tests and local tooling
+tests/
+test_*.py
+*_test.py
+backend_tests.py
+test_backend.py
+
+# Local data, instances, and logs
+instance/
+*.db
+*.sqlite3
+*.sqlite
+logs/
+*.log
+
+# Docs and examples
+README.md
+*.md
+postman/
+
+# CI / meta
+.github/
+docker-compose*.yml
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+.coverage
+coverage.xml
+htmlcov/
+
+# Keep required build inputs
+!requirements.txt
+!app.py
+!flask_backend.py
