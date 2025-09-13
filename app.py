@@ -9,7 +9,6 @@ from flask_backend import app, db, User, Task  # noqa: F401
 
 
 if __name__ == "__main__":
-    # Ensure tables exist, then run the dev server
     with app.app_context():
         db.create_all()
     port = int(os.getenv("PORT", 5000))

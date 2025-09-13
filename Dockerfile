@@ -25,11 +25,9 @@ COPY --from=builder /opt/venv /opt/venv
 # Copia solo los archivos necesarios de la aplicación
 COPY app.py ./
 COPY flask_backend.py ./
-
+COPY supervisord.conf /opt/supervisord.conf
+EXPOSE 8000
+EXPOSE 9001
 EXPOSE 5000
-
-# CMD ["python", "app.py"]
 # Inicia la app con gunicorn con 4 workers.
-
-CMD ["supervisord", "-c supervisor.conf"]
-
+CMD ["supervisord","-c","/opt/supervisord.conf"]
