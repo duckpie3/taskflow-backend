@@ -28,4 +28,8 @@ COPY flask_backend.py ./
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+# CMD ["python", "app.py"]
+# Inicia la app con gunicorn con 4 workers.
+
+CMD ["supervisord", "-c supervisor.conf"]
+
