@@ -274,8 +274,8 @@ class TaskFlowTestCase(unittest.TestCase):
         self.register_user("user2", "user2@test.com")
         
         # Login de ambos usuarios
-        token1 = json.loads(self.login_user("user1"))['token']
-        token2 = json.loads(self.login_user("user2"))['token']
+        token1 = json.loads(self.login_user("user1").data)['token']
+        token2 = json.loads(self.login_user("user2").data)['token']
         
         # Usuario 1 crea una tarea
         self.app.post('/api/tasks',

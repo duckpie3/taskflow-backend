@@ -9,8 +9,19 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///taskflow.db'
+# Usar ruta absoluta para la base de datos
+os.makedirs(app.instance_path, exist_ok=True)
+default_db_path = os.path.join(app.instance_path, 'taskflow.db')
+db_uri = os.getenv('DATABASE_URL', f'sqlite:///{default_db_path}')
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+if db_uri.startswith('sqlite:///'):
+    sqlite_path = db_uri.replace('sqlite:///', '', 1)
+    if sqlite_path != ':memory:':
+        if not os.path.isabs(sqlite_path):
+            sqlite_path = os.path.join(app.root_path, sqlite_path)
+        os.makedirs(os.path.dirname(sqlite_path), exist_ok=True)
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -110,7 +121,8 @@ def register():
             'user': user.to_dict()
         }), 201
         
-    except Exception as e:
+    except Exception as e: 
+        db.create_all()
         db.session.rollback()
         return jsonify({'message': f'Error registering user: {str(e)}'}), 500
 
@@ -139,6 +151,7 @@ def login():
         return jsonify({'message': 'Invalid credentials'}), 401
         
     except Exception as e:
+        db.create_all()
         return jsonify({'message': f'Error during login: {str(e)}'}), 500
 
 # Rutas de Tareas
@@ -232,11 +245,11 @@ def delete_task(current_user, task_id):
 def health_check():
     return jsonify({'status': 'healthy', 'message': 'TaskFlow API is running'}), 200
 
-# Inicialización de la base de datos (evitar decoradores removidos en Flask 3)
 def create_tables():
     db.create_all()
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+    create_tables()
     app.run(debug=True, port=5000)
