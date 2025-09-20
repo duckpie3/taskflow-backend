@@ -10,15 +10,21 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
 # Usar ruta absoluta para la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////app/instance/taskflow.db'
+os.makedirs(app.instance_path, exist_ok=True)
+default_db_path = os.path.join(app.instance_path, 'taskflow.db')
+db_uri = os.getenv('DATABASE_URL', f'sqlite:///{default_db_path}')
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+if db_uri.startswith('sqlite:///'):
+    sqlite_path = db_uri.replace('sqlite:///', '', 1)
+    if sqlite_path != ':memory:':
+        if not os.path.isabs(sqlite_path):
+            sqlite_path = os.path.join(app.root_path, sqlite_path)
+        os.makedirs(os.path.dirname(sqlite_path), exist_ok=True)
 
 db = SQLAlchemy(app)
 CORS(app)
-
-# Inicializar la base de datos
-with app.app_context():
-    db.create_all()
 
 # Modelos
 class User(db.Model):
