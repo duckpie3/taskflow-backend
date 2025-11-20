@@ -1,14 +1,13 @@
-# Etapa de build
-FROM python:3.13.7-alpine3.22 AS builder
+FROM python:3.11-alpine AS builder
 
 WORKDIR /app
 
 COPY requirements.txt ./
 
-# Instalar dependencias de compilación para Postgres ---
+# Instalar dependencias de compilación para Postgres
 RUN apk add --no-cache postgresql-dev gcc python3-dev musl-dev
 
-# Crear entorno virtual y instalar dependencias
+# Crear entorno virtual e instalar dependencias
 RUN python -m venv /opt/venv \
     && . /opt/venv/bin/activate \
     && pip install --no-cache-dir -r requirements.txt \
@@ -16,7 +15,7 @@ RUN python -m venv /opt/venv \
 
 ############################################################
 # Etapa de producción
-FROM python:3.13.7-alpine3.22 AS production
+FROM python:3.11-alpine AS production
 
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -24,7 +23,7 @@ ENV PATH="/opt/venv/bin:$PATH" \
 
 WORKDIR /app
 
-# Instalar librería cliente de Postgres para ejecución ---
+# Instalar librería cliente de Postgres para ejecución
 RUN apk add --no-cache libpq
 
 # Copia únicamente las dependencias ya instaladas desde el builder
