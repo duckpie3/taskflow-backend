@@ -1,9 +1,13 @@
-# Etapa de build: instala dependencias en un venv aislado
+# Etapa de build
 FROM python:3.13.7-alpine3.22 AS builder
 
 WORKDIR /app
 
 COPY requirements.txt ./
+
+# Instalar dependencias de compilación para Postgres ---
+RUN apk add --no-cache postgresql-dev gcc python3-dev musl-dev
+
 # Crear entorno virtual y instalar dependencias
 RUN python -m venv /opt/venv \
     && . /opt/venv/bin/activate \
@@ -11,7 +15,7 @@ RUN python -m venv /opt/venv \
     && pip install --no-cache-dir gunicorn supervisor
 
 ############################################################
-# Etapa de producción: imagen limpia con solo artefactos necesarios
+# Etapa de producción
 FROM python:3.13.7-alpine3.22 AS production
 
 ENV PATH="/opt/venv/bin:$PATH" \
@@ -19,6 +23,9 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
+
+# Instalar librería cliente de Postgres para ejecución ---
+RUN apk add --no-cache libpq
 
 # Copia únicamente las dependencias ya instaladas desde el builder
 COPY --from=builder /opt/venv /opt/venv
@@ -35,8 +42,6 @@ RUN addgroup -g 1000 appuser && \
     mkdir -p /app/instance /app/data && \
     chown -R appuser:appuser /app
 
-# Cambiar al usuario appuser
 USER appuser
 
-# Inicia la app con gunicorn con 4 workers.
 CMD ["supervisord","-c","/opt/supervisord.conf"]
